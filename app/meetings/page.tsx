@@ -1,7 +1,7 @@
 import MeetingCard from "@/components/MeetingCard";
 
 async function getMeetings() {
-  const response = await fetch("http://localhost:3000/api/meetings");
+  const response = await fetch("https://vercel.com/aurora-wdd-430/sacrament-meetings/EwoUkUf5uakwnaaq2n7z5yyRbbwa/api/meetings");
   if (!response.ok) {
     throw new Error("Failed to fetch meetings");
   }

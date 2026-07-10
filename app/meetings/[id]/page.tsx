@@ -1,7 +1,7 @@
 import MeetingDetail from "@/components/MeetingDetail";
 
 async function getMeeting(id: number) {
-    const response = await fetch(`http://localhost:3000/api/meetings/${id}`);
+    const response = await fetch(`https://vercel.com/aurora-wdd-430/sacrament-meetings/EwoUkUf5uakwnaaq2n7z5yyRbbwa/api/meetings/${id}`);
     if (!response.ok) {
     throw new Error("Failed to fetch meeting");
   }
