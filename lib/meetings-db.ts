@@ -93,6 +93,24 @@ const meetings: SacramentMeeting[] = [
     ],
     closingHymn: { number: 1, title: 'The Morning Breaks' },
     closingPrayer: 'Sister Johnson'
+  },
+  {
+    id: 5,
+    date: '2026-07-12',
+    meetingType: 'regular',
+    presiding: 'Bishop Doe',
+    conducting: 'Brother Reid',
+    openingHymn: { number: 7, title: 'Israel, Israel, God is Calling' },
+    openingPrayer: 'Sister Abrams',
+    wardBusiness: [{ description: 'none' }],
+    stakeBusiness: true,
+    sacramentHymn: { number: 177, title: "'Tis Sweet to Sing the Matchless Love" },
+    speakers: [
+      { name: 'Sister Swan', topic: 'Developing Christlike Attributes', type: 'speaker' },
+      { name: 'Brother Swan', topic: 'Developing Christlike Attributes', type: 'speaker' },
+    ],
+    closingHymn: { number: 1003, title: 'It is Well With My Soul' },
+    closingPrayer: 'Sister Johnson'
   }
 ];
 
