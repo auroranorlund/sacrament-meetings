@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 
 async function getMeetings() {
   try {
-    const response = await fetch("https://sacrament-meetings-git-peer-code-review-aurora-wdd-430.vercel.app/api/meetings");
+    const response = await fetch("https://sacrament-meetings-dun.vercel.app/api/meetings");
     return response.json();
   } catch (error) {
     console.error("Error fetching meetings:", error);

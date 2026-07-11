@@ -12,7 +12,7 @@ function findRecentSunday() {
 
 async function findRecentMeeting() {
     const recentSunday = findRecentSunday();
-    const response = await fetch(`https://sacrament-meetings-git-peer-code-review-aurora-wdd-430.vercel.app/api/meetings?date=${recentSunday}`);
+    const response = await fetch(`https://sacrament-meetings-dun.vercel.app/api/meetings?date=${recentSunday}`);
     if (!response.ok) {
         return null;
     }
