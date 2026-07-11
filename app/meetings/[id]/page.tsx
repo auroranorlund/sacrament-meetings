@@ -1,7 +1,8 @@
 import MeetingDetail from "@/components/MeetingDetail";
+export const dynamic = 'force-dynamic'
 
 async function getMeeting(id: number) {
-    const response = await fetch(`https://vercel.com/aurora-wdd-430/sacrament-meetings/EwoUkUf5uakwnaaq2n7z5yyRbbwa/api/meetings/${id}`);
+    const response = await fetch(`https://sacrament-meetings-git-peer-code-review-aurora-wdd-430.vercel.app/api/meetings/${id}`);
     if (!response.ok) {
     throw new Error("Failed to fetch meeting");
   }

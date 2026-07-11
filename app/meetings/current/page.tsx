@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 
+export const dynamic = 'force-dynamic'
+
 function findRecentSunday() {
     const today = new Date();
     const dayOfWeek = today.getUTCDay();
@@ -10,7 +12,7 @@ function findRecentSunday() {
 
 async function findRecentMeeting() {
     const recentSunday = findRecentSunday();
-    const response = await fetch(`https://vercel.com/aurora-wdd-430/sacrament-meetings/EwoUkUf5uakwnaaq2n7z5yyRbbwa/api/meetings?date=${recentSunday}`);
+    const response = await fetch(`https://sacrament-meetings-git-peer-code-review-aurora-wdd-430.vercel.app/api/meetings?date=${recentSunday}`);
     if (!response.ok) {
         return null;
     }
