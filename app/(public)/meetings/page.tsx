@@ -1,19 +1,20 @@
 import MeetingCard from "@/components/MeetingCard";
+import { getMeetings, getMeetingsTotalPages } from '@/lib/meetings-db';
+import { MeetingSearch } from '@/components/MeetingSearch';
+import { Pagination } from '@/components/Pagination';
 
 export const dynamic = 'force-dynamic'
 
-async function getMeetings() {
-  try {
-    const response = await fetch("https://sacrament-meetings-dun.vercel.app/api/meetings");
-    return response.json();
-  } catch (error) {
-    console.error("Error fetching meetings:", error);
-    return null;
-  }
-}
+export default async function Meetings(props: {
+  searchParams?: Promise<{ query?: string; page?: string }>;
+}) {
+  const searchParams = await props.searchParams;
+  const query = searchParams?.query ?? '';
+  const currentPage = Number(searchParams?.page) || 1;
 
-export default async function Meetings() {
-  const meetings = await getMeetings();
+  const meetings = await getMeetings(query, currentPage);
+  const totalPages = await getMeetingsTotalPages(query);
+
   if (!meetings) {
     return (
     <main className="flex-1">
@@ -34,9 +35,11 @@ export default async function Meetings() {
     <main className="flex-1">
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-3xl font-bold mb-6">Meetings</h2>
+      <MeetingSearch />
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {meetingCards}
-      </div>
+          </div>
+      <Pagination totalPages={totalPages} />
     </div>
   </main>
   );
