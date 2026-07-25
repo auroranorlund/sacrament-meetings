@@ -74,3 +74,57 @@ export async function getMeetingById(
   `;
   return (rows[0] as unknown as SacramentMeeting) ?? null;
 }
+
+export async function getNewMeetingId(): Promise<number> {
+  const rows = await sql`SELECT * FROM meetings`;
+  const ids = rows.map((row) => row.id);
+  const maxId = Math.max(...ids);
+  return maxId + 1;
+};
+
+export async function addMeeting(
+  data: Omit<SacramentMeeting, 'id'>) {
+  const id = await getNewMeetingId();
+  try {
+    await sql`
+    INSERT INTO meetings (
+      id, date, meeting_type, presiding, conducting, announcements,
+      opening_hymn, opening_prayer, ward_business, stake_business, sacrament_hymn, speakers, closing_hymn, closing_prayer
+    ) VALUES (
+      ${id}, ${data.date}, ${data.meetingType as string}, ${data.presiding}, ${data.conducting}, ${(data.announcements ?? [])},
+      ${data.openingHymn}, ${data.openingPrayer}, ${JSON.stringify(data.wardBusiness)}::json, ${data.stakeBusiness}, ${data.sacramentHymn}, ${JSON.stringify(data.speakers)}::json, ${data.closingHymn}, ${data.closingPrayer}
+    )
+  `;
+  }
+  catch (error: unknown) {
+    if (error instanceof Error) {
+    console.log('meetings-db error:')
+      console.error(error)
+  } else {
+    console.error("An unexpected error occurred", error);
+  }
+  }
+}
+
+export async function updateMeeting(updates: SacramentMeeting) {
+  try {
+    await sql `UPDATE meetings SET date = ${updates.date}, meeting_type = ${updates.meetingType as string}, presiding = ${updates.presiding}, conducting = ${updates.conducting}, announcements = ${(updates.announcements ?? [])}, opening_hymn = ${(updates.openingHymn)}, opening_prayer = ${updates.openingPrayer}, ward_business = ${JSON.stringify(updates.wardBusiness)}::json, stake_business = ${updates.stakeBusiness}, sacrament_hymn = ${(updates.sacramentHymn)}, speakers = ${JSON.stringify(updates.speakers)}::json, closing_hymn = ${(updates.closingHymn)}, closing_prayer = ${updates.closingPrayer} WHERE id = ${updates.id}`
+  }
+  catch (error: unknown){
+    if (error instanceof Error) {
+    console.log('meetings-db error:')
+      console.error(error)
+  } else {
+    console.error("An unexpected error occurred", error);
+  }
+  }
+}
+
+export async function deleteMeeting(id: number) {
+  try {
+    await sql`DELETE FROM meetings WHERE id = ${id}`;
+  }
+  catch {
+    throw new Error("The meeting was unable to be deleted from the database.")
+  }
+}
