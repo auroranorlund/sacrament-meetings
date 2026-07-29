@@ -3,6 +3,12 @@ import { getMeetings, getMeetingsTotalPages } from '@/lib/meetings-db';
 import { MeetingSearch } from '@/components/MeetingSearch';
 import { Pagination } from '@/components/Pagination';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Meetings',
+};
+
 export const dynamic = 'force-dynamic'
 
 export default async function Meetings(props: {

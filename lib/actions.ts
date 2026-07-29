@@ -5,6 +5,40 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from "next/navigation";
 import { z } from 'zod';
 
+import { signIn, auth } from '@/auth';
+import { AuthError } from 'next-auth';
+
+async function requireOwnerSession() {
+  const session = await auth();
+  if (!session?.user) throw new Error('Not authenticated');
+  return session;
+}
+
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  const email = formData.get("email")
+  const password = formData.get("password")
+  console.log(email);
+  console.log(password);
+  try {
+    await signIn('credentials', {email, password, redirectTo: "/meetings"});
+    redirect('/meetings');
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Invalid email or password.';
+        default:
+          return 'Something went wrong.';
+      }
+    }
+    throw error;
+  }
+}
+
+
 const meetingSchema = z.object({
   date: z.date(),
   meetingType: z.string().trim().min(1, { message: 'Meeting type is required' }).max(10, { message: 'Please select a valid meeting type' }),
@@ -63,6 +97,7 @@ export type State = {
 };
 
 export async function deleteMeetingAction(id: number) {
+  await requireOwnerSession();
   try {
     await deleteMeeting(id);
     revalidatePath('/meetings');
@@ -76,6 +111,7 @@ export async function deleteMeetingAction(id: number) {
 }
 
 export async function addMeetingAction(prevState: State, formData: FormData): Promise<State> {
+  await requireOwnerSession();
   const raw = {
     date: formData.get('date') ? new Date(String(formData.get('date'))) : undefined,
     meetingType: formData.get('meetingType')?.toString() ?? '',
@@ -190,6 +226,7 @@ export async function addMeetingAction(prevState: State, formData: FormData): Pr
 };
 
 export async function editMeetingAction(id: number, formData: FormData) {
+  await requireOwnerSession();
   const raw = {
     date: formData.get('date') ? new Date(String(formData.get('date'))) : undefined,
     meetingType: formData.get('meetingType')?.toString() ?? '',

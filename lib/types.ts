@@ -35,3 +35,9 @@ export interface SacramentMeeting {
   closingHymn: Hymn;
   closingPrayer: string;
 }
+
+export interface User {
+  id: string;
+  email: string;
+  password: string;
+}

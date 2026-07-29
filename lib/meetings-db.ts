@@ -1,7 +1,18 @@
-import type { SacramentMeeting } from './types';
+import type { SacramentMeeting, User } from './types';
 import { neon } from '@neondatabase/serverless';
 
 const sql = neon(process.env.DATABASE_URL!);
+
+export async function getUserByEmail(email: string): Promise<User> {
+  try {
+    const rows = await sql`SELECT * FROM users WHERE email = ${email}`;
+    return rows[0] as User;
+  }
+  catch (error) {
+    console.error()
+    throw new Error("This user does not exist.")
+  }
+}
 
 const ITEMS_PER_PAGE = 5;
 
